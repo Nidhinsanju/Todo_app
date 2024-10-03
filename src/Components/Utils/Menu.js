@@ -1,46 +1,65 @@
 import Header from "./Header";
-import SubMenu from "./subMenu";
+import {
+  House2,
+  People,
+  Buliding,
+  Stickynote,
+  DocumentFilter,
+  CalendarTick,
+} from "iconsax-react";
+
 export default function Menu() {
+  const icons = {
+    home: House2,
+    calendar: CalendarTick,
+    tasks: DocumentFilter,
+    people: People,
+    building: Buliding,
+    stickynote: Stickynote,
+  };
+
   const menu = [
     {
       label: "Home",
       to: "/",
       active: true,
-      style: { fontSize: "48px", color: "red" }, // Use object for style
+      icons: icons.home,
+      style: { fontSize: "30px", color: "grey" }, // Use object for style
     },
     {
       label: "Calendar",
       to: "/",
       active: false,
-      style: { fontSize: "48px", color: "red" }, // Use object for style
+      icons: icons.calendar,
+
+      style: { fontSize: "30px", color: "grey" }, // Use object for style
     },
     {
       label: "Tasks",
       to: "/",
       active: false,
-      style: { fontSize: "48px", color: "red" }, // Use object for style
+      icons: icons.building,
+      style: { fontSize: "30px", color: "grey" }, // Use object for style
     },
   ];
+
   return (
     <>
-      <nav className="max-w-64 min-h-screen">
-        <section className=" border-b-4 border-gray-300">
+      <nav className="max-w-64 min-h-screen ml-1">
+        <section className=" border-b-4 border-gray-300 ">
           <Header />
-          {menu.map((data) => {
-            console.log(data);
+          {menu.map((data, i) => {
             return (
-              <div className="p-2 ml-2">
-                <i class="material-icons">&#xe8de;</i>
-                <button className="text-black p-2">{data.label}</button>
+              <div className=" ml-2 flex items-center py-4 " key={i}>
+                <data.icons className="material-icons" style={data.style} />
+                <button className="text-black ml-3">{data.label}</button>
               </div>
             );
           })}
         </section>
-        <section>
-          <SubMenu />
-        </section>
+        <section className="mt-4"></section>
         <footer className="flex flex-col-reverse">
-          <p>Footer</p>
+          <button>Adding new Task Button with animation</button>
         </footer>
       </nav>
     </>
