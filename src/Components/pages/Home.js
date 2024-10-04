@@ -1,4 +1,6 @@
 import Task from "../pages/Task.js";
+import { CalendarBar } from "../Utils/Calendar.js";
+
 function Home() {
   const data = [
     {
@@ -21,9 +23,9 @@ function Home() {
     },
   ];
   return (
-    <div>
+    <div className="flex w-full">
       <Task data={data} />
-      <h1>Hi there</h1>
+      <CalendarBar />
     </div>
   );
 }
