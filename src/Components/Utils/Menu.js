@@ -45,8 +45,8 @@ export default function Menu() {
 
   return (
     <>
-      <nav className="max-w-64 min-h-screen ml-1">
-        <section className=" border-b-4 border-gray-300 ">
+      <aside className="max-w-64 min-h-screen ml-1 border-4  border-r-indigo-500">
+        <main className=" border-b-4 border-gray-300 ">
           <Header />
           {menu.map((data, i) => {
             return (
@@ -56,12 +56,11 @@ export default function Menu() {
               </div>
             );
           })}
-        </section>
-        <section className="mt-4"></section>
+        </main>
         <footer className="flex flex-col-reverse">
           <button>Adding new Task Button with animation</button>
         </footer>
-      </nav>
+      </aside>
     </>
   );
 }
