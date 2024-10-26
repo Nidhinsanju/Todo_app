@@ -1,11 +1,30 @@
+import { Previous } from "iconsax-react";
 import Home from "./Components/pages/Home";
+import Login from "./Components/pages/Login";
 import Menu from "./Components/Utils/Menu";
+import { createContext, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+export const TaskContext = createContext();
 
 function App() {
+  const count = parseInt(localStorage.getItem("taskCount"), 10) || 0; // Ensure it's a number
+  const [taskCount, setTaskCount] = useState(count);
+  const handleAddTask = () => {
+    setTaskCount((prevCount) => prevCount + 1);
+  };
+
   return (
     <section className="flex">
-      <Menu />
-      <Home /> {/* Add your components here */}
+      <BrowserRouter>
+        <TaskContext.Provider value={{ taskCount, handleAddTask }}>
+          <Menu />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+          </Routes>
+        </TaskContext.Provider>
+      </BrowserRouter>
     </section>
   );
 }

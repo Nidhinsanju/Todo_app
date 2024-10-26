@@ -1,7 +1,11 @@
 import Task from "../pages/Task.js";
-import { CalendarBar } from "../Utils/Calendar.js";
+import { useContext, useEffect, useState } from "react";
+import { TaskContext } from "../../App";
 
+import { CalendarBar } from "../Utils/Calendar.js";
 function Home() {
+  const { taskCount } = useContext(TaskContext);
+
   const data = [
     {
       id: 1,
@@ -15,16 +19,27 @@ function Home() {
       description: "This is task 2",
       completed: false,
     },
-    {
-      id: 3,
-      title: "Task 3",
-      description: "This is task 3",
-      completed: false,
-    },
   ];
+
+  localStorage.setItem("taskCount", data.length);
+
+  const [tasks, setTasks] = useState(data);
+
+  useEffect(() => {
+    if (taskCount > tasks.length) {
+      const newTask = {
+        id: tasks.length + 1,
+        title: `Task ${tasks.length + 1}`,
+        description: `This is task ${tasks.length + 1}`,
+        completed: false,
+      };
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+    }
+  }, [taskCount, tasks.length]);
+
   return (
     <div className="flex w-full">
-      <Task data={data} />
+      <Task data={tasks} />
       <CalendarBar />
     </div>
   );

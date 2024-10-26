@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function Task({ data }) {
   const [checkBoxState, setCheckboxState] = useState({});
+
   const hanldeClick = (id) => {
     console.log(id, "im clicked");
   };
