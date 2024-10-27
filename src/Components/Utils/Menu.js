@@ -1,26 +1,17 @@
 import Header from "./Header";
-import {
-  House2,
-  People,
-  Buliding,
-  Stickynote,
-  DocumentFilter,
-  CalendarTick,
-} from "iconsax-react";
+import { House2, CalendarTick, CpuSetting, Logout } from "iconsax-react";
 import { TaskContext } from "../../App";
 import { useContext } from "react";
 
 export default function Menu() {
   const { handleAddTask } = useContext(TaskContext);
 
-  const token = localStorage.getItem("token") || "asds";
+  const token = localStorage.getItem("token") || false;
   const icons = {
     home: House2,
     calendar: CalendarTick,
-    tasks: DocumentFilter,
-    people: People,
-    building: Buliding,
-    stickynote: Stickynote,
+    Setting: CpuSetting,
+    Logout: Logout,
   };
 
   const menu = [
@@ -31,12 +22,26 @@ export default function Menu() {
       icons: icons.home,
       style: { fontSize: "30px", color: "grey" }, // Use object for style
     },
+    {
+      label: "Settings",
+      to: "/settings",
+      active: true,
+      icons: icons.Setting,
+      style: { fontSize: "30px", color: "grey" }, // Use object for style
+    },
+    {
+      label: "Logout",
+      to: "/",
+      active: true,
+      icons: icons.Logout,
+      style: { fontSize: "30px", color: "grey" }, // Use object for style
+    },
   ];
 
   return (
     <>
       {token && (
-        <aside className="max-w-64 min-h-screen ml-1 border-4 min-w-64 border-r-indigo-500">
+        <aside className="max-w-64 min-h-screen ml-1  min-w-64 border-r-4 border-gray-300">
           <main className=" border-b-4 border-gray-300 ">
             <Header />
             {menu.map((data, i) => {

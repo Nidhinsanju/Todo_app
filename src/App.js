@@ -1,9 +1,9 @@
-import { Previous } from "iconsax-react";
 import Home from "./Components/pages/Home";
 import Login from "./Components/pages/Login";
 import Menu from "./Components/Utils/Menu";
 import { createContext, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AccountSettings from "./Components/pages/AccountSettings";
 
 export const TaskContext = createContext();
 
@@ -22,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/settings" element={<AccountSettings />} />
           </Routes>
         </TaskContext.Provider>
       </BrowserRouter>

@@ -6,6 +6,8 @@ export default function Example() {
     password: "",
   });
 
+  const [state, setState] = useState(true);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     e.preventDefault();
@@ -16,138 +18,310 @@ export default function Example() {
   };
 
   const handleSignin = () => {
-    console.log("Clicked");
+    console.log("Clicked", user);
   };
 
   const handleSignup = () => {
-    console.log("Clicked up");
+    console.log("Clicked up", user);
   };
 
   return (
     <>
-      <div className="font-[sans-serif] w-full">
-        <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
-          <div className="max-md:order-1 h-screen min-h-full">
-            <img
-              src="https://readymadeui.com/image-3.webp"
-              className="w-full h-full object-cover"
-              alt="login-image"
-            />
-          </div>
-          <form className="max-w-xl w-full p-6 mx-auto">
-            <div className="mb-12">
-              <h3 className="text-gray-800 text-4xl font-extrabold">Sign in</h3>
-              <p className="text-gray-800 text-sm mt-6">
-                Don't have an account{" "}
-                <a
-                  href="javascript:void(0);"
-                  className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
-                >
-                  Register here
-                </a>
-              </p>
+      {state === true ? (
+        <div className="font-[sans-serif] w-full">
+          <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
+            <div className="max-md:order-1 h-screen min-h-full">
+              <img
+                src="https://readymadeui.com/image-3.webp"
+                className="w-full h-full object-cover"
+                alt="login-image"
+              />
             </div>
-            <div>
-              <label className="text-gray-800 text-sm block mb-2">Email</label>
-              <div className="relative flex items-center">
-                <input
-                  name="email"
-                  type="text"
-                  onChange={handleChange}
-                  required
-                  className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
-                  placeholder="Enter email"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#bbb"
-                  stroke="#bbb"
-                  className="w-[18px] h-[18px] absolute right-2"
-                  viewBox="0 0 682.667 682.667"
-                >
-                  <defs>
-                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                      <path d="M0 512h512V0H0Z" data-original="#000000"></path>
-                    </clipPath>
-                  </defs>
-                  <g
-                    clip-path="url(#a)"
-                    transform="matrix(1.33 0 0 -1.33 0 682.667)"
+            <form className="max-w-xl w-full p-6 mx-auto">
+              <div className="mb-12">
+                <h3 className="text-gray-800 text-4xl font-extrabold">
+                  Sign in
+                </h3>
+                <p className="text-gray-800 text-sm mt-6">
+                  Don't have an account{" "}
+                  <a
+                    href="javascript:void(0);"
+                    className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
                   >
-                    <path
-                      fill="none"
-                      stroke-miterlimit="10"
-                      stroke-width="40"
-                      d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                      data-original="#000000"
-                    ></path>
-                    <path
-                      d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                      data-original="#000000"
-                    ></path>
-                  </g>
-                </svg>
-              </div>
-            </div>
-            <div className="mt-8">
-              <label className="text-gray-800 text-sm block mb-2">
-                Password
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  onChange={handleChange}
-                  value={user.password}
-                  name="password"
-                  type="password"
-                  required
-                  className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
-                  placeholder="Enter password"
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#bbb"
-                  stroke="#bbb"
-                  className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
-                  viewBox="0 0 128 128"
-                >
-                  <path
-                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                    data-original="#000000"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label
-                  for="remember-me"
-                  className="ml-3 block text-sm text-gray-800"
-                >
-                  Remember me
-                </label>
+                    <button onClick={() => setState(false)}>
+                      Register here
+                    </button>
+                  </a>
+                </p>
               </div>
               <div>
-                <a
-                  href="jajvascript:void(0);"
-                  className="text-blue-600 font-semibold text-sm hover:underline"
-                >
-                  Forgot Password?
-                </a>
+                <label className="text-gray-800 text-sm block mb-2">
+                  Email
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    name="email"
+                    type="text"
+                    onChange={handleChange}
+                    required
+                    className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                    placeholder="Enter email"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#bbb"
+                    stroke="#bbb"
+                    className="w-[18px] h-[18px] absolute right-2"
+                    viewBox="0 0 682.667 682.667"
+                  >
+                    <defs>
+                      <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                        <path
+                          d="M0 512h512V0H0Z"
+                          data-original="#000000"
+                        ></path>
+                      </clipPath>
+                    </defs>
+                    <g
+                      clip-path="url(#a)"
+                      transform="matrix(1.33 0 0 -1.33 0 682.667)"
+                    >
+                      <path
+                        fill="none"
+                        stroke-miterlimit="10"
+                        stroke-width="40"
+                        d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
+                        data-original="#000000"
+                      ></path>
+                      <path
+                        d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
+                        data-original="#000000"
+                      ></path>
+                    </g>
+                  </svg>
+                </div>
               </div>
-            </div>
-            <div class="mt-12">
-              <Button handleClick={handleSignin}>Log in</Button>
-              <Button handleClick={handleSignup}>Sign up</Button>
-            </div>
-          </form>
+              <div className="mt-8">
+                <label className="text-gray-800 text-sm block mb-2">
+                  Password
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    onChange={handleChange}
+                    value={user.password}
+                    name="password"
+                    type="password"
+                    required
+                    className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                    placeholder="Enter password"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#bbb"
+                    stroke="#bbb"
+                    className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
+                    viewBox="0 0 128 128"
+                  >
+                    <path
+                      d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                      data-original="#000000"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label
+                    for="remember-me"
+                    className="ml-3 block text-sm text-gray-800"
+                  >
+                    Remember me
+                  </label>
+                </div>
+                <div>
+                  <a
+                    href="jajvascript:void(0);"
+                    className="text-blue-600 font-semibold text-sm hover:underline"
+                  >
+                    Forgot Password?
+                  </a>
+                </div>
+              </div>
+              <div class="mt-12">
+                <Button handleClick={handleSignin}>Log in</Button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="font-[sans-serif] w-full">
+          <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
+            <form className="max-w-xl w-full p-6 mx-auto">
+              <div className="mb-12">
+                <h3 className="text-gray-800 text-4xl font-extrabold">
+                  Sign in
+                </h3>
+                <p className="text-gray-800 text-sm mt-6">
+                  Have a Account?
+                  <a
+                    href="javascript:void(0);"
+                    className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
+                  >
+                    <button onClick={() => setState(true)}>Login</button>
+                  </a>
+                </p>
+              </div>
+              <section className="flex xs:flex-col justify-between w-full">
+                <div>
+                  <label className="text-gray-800 text-sm block  ">
+                    First Name
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      name="firstName"
+                      type="text"
+                      onChange={handleChange}
+                      required
+                      className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                      placeholder="Enter First Name"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-gray-800 text-sm block  ">
+                    Last Name
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      name="lastName"
+                      type="text"
+                      onChange={handleChange}
+                      required
+                      className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                      placeholder="Enter Last Name"
+                    />
+                  </div>
+                </div>
+              </section>
+              <div>
+                <label className="text-gray-800 text-sm block  mt-2">
+                  Email
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    name="email"
+                    type="text"
+                    onChange={handleChange}
+                    required
+                    className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                    placeholder="Enter email"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#bbb"
+                    stroke="#bbb"
+                    className="w-[18px] h-[18px] absolute right-2"
+                    viewBox="0 0 682.667 682.667"
+                  >
+                    <defs>
+                      <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                        <path
+                          d="M0 512h512V0H0Z"
+                          data-original="#000000"
+                        ></path>
+                      </clipPath>
+                    </defs>
+                    <g
+                      clip-path="url(#a)"
+                      transform="matrix(1.33 0 0 -1.33 0 682.667)"
+                    >
+                      <path
+                        fill="none"
+                        stroke-miterlimit="10"
+                        stroke-width="40"
+                        d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
+                        data-original="#000000"
+                      ></path>
+                      <path
+                        d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
+                        data-original="#000000"
+                      ></path>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="text-gray-800 text-sm block ">Password</label>
+                <div className="relative flex items-center">
+                  <input
+                    onChange={handleChange}
+                    name="password"
+                    type="password"
+                    required
+                    className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                    placeholder="Enter password"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#bbb"
+                    stroke="#bbb"
+                    className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
+                    viewBox="0 0 128 128"
+                  >
+                    <path
+                      d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                      data-original="#000000"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="text-gray-800 text-sm block ">
+                  Conform Password
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    onChange={handleChange}
+                    name="Conformpassword"
+                    type="password"
+                    required
+                    className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
+                    placeholder="Repeat password"
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#bbb"
+                    stroke="#bbb"
+                    className="w-[18px] h-[18px] absolute right-2 cursor-pointer"
+                    viewBox="0 0 128 128"
+                  >
+                    <path
+                      d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+                      data-original="#000000"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="mt-12">
+                <Button handleClick={handleSignup}>Sign up</Button>
+              </div>
+            </form>
+            <div className="max-md:order-1 h-screen min-h-full">
+              <img
+                src="https://readymadeui.com/image-3.webp"
+                className="w-full h-full object-cover"
+                alt="login-image"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
