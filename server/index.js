@@ -2,17 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const { User, Task, Cart } = require("./DB/index");
-const { AuthToken, deCryptAuth } = require("./Auth/index");
+const { authToken, SecretKey } = require("./Auth/index");
+const jwt = require("jsonwebtoken");
 
 const cors = require("cors");
 
-const tokenString =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZm9vYmFyIiwiaWF0IjoxNzMwMTM2OTQ5fQ.xMIc3Qp6JUiPQWx-lOrii0zDsvD5T4CSEdImKLBcRHQ";
-
 const uri = process.env.DATABASEURL;
-
-deCryptAuth(tokenString);
-AuthToken();
 
 const app = express();
 
@@ -29,7 +24,7 @@ app.post("/user-login/", async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Please provide email and password",
       });
     }
@@ -39,7 +34,14 @@ app.post("/user-login/", async (req, res) => {
         if (!user) {
           res.status(404).json({ message: "Invalid email or password" });
         } else {
-          res.status(200).json({ message: "User exisits", user });
+          const token = jwt.sign({ email: email, role: "user" }, SecretKey, {
+            expiresIn: "2hr",
+          });
+          res.status(200).json({
+            message: "Logged in Sucessfully",
+            user: user,
+            token: token,
+          });
         }
       } catch (err) {
         res.status(500).json({ message: err.message });
@@ -60,14 +62,16 @@ app.post("/user-signup/", async (req, res) => {
     } else {
       const ExisitingUser = await User.findOne({ email: email });
       if (!ExisitingUser) {
-        const customerId = Math.random();
-        const user = new User({
-          firstName,
-          lastName,
-          email,
-          password,
-          customerId,
-        });
+        const customerId = Math.floor(Math.random() * 100) + 1;
+        const newCustomer = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          CustomerId: customerId,
+        };
+        const user = new User(newCustomer);
+        await user.save();
 
         const cart = new Cart({
           CustomerId: customerId,
@@ -75,14 +79,49 @@ app.post("/user-signup/", async (req, res) => {
         });
 
         await cart.save();
-        await user.save();
         res.status(201).json({ message: "User created successfully" });
       } else {
-        res.status(404).json({ message: "User already exists" });
+        res
+          .status(404)
+          .json({ message: "User already exists with this Email Address" });
       }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+app.post("/task-list/", authToken, async (req, res) => {
+  const { token, id } = req.body;
+  try {
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    if (typeof id == "string") {
+      return res.status(403).json({ message: "id must be a Number" });
+    }
+    if (token && id) {
+      try {
+        const taskList = await Cart.findOne({ CustomerId: id });
+        if (taskList !== null) {
+          return res
+            .status(200)
+            .json({ message: "Cart successfully", taskList: taskList });
+        }
+        res.status(403).json({ message: "Customer ID not found in any cart" });
+      } catch (err) {
+        res
+          .status(500)
+          .json({ message: "internal Server Error", err: err.message });
+      }
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", err: err.message });
   }
 });
 

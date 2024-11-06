@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const TaskSchema = new mongoose.Schema({
   TaskID: Number,
   Title: String,
+  CustomerId: Number,
   Description: String,
   status: Boolean,
   date: {
