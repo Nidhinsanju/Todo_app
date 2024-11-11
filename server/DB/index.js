@@ -9,14 +9,14 @@ const TaskSchema = new mongoose.Schema({
   Description: String,
   status: Boolean,
   date: {
-    type: Date, // Date type for storing date and time values
-    default: Date.now, // Optionally, set a default value to the current date
+    type: String, // Store as string in format YYYY-MM-DD
+    required: true,
   },
 });
 
 const CartSchema = new mongoose.Schema({
   CustomerId: Number,
-  taskList: [TaskSchema],
+  taskList: [Number], // This should define `taskList` as an array of numbers
 });
 
 const UsersSchema = new mongoose.Schema({
