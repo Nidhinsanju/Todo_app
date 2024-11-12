@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from "../Utils/Button";
+import { Login } from "../../hooks/hooks";
 export default function Example() {
   const [user, setUser] = useState({
     email: "",
@@ -17,8 +18,10 @@ export default function Example() {
     }));
   };
 
-  const handleSignin = () => {
-    console.log("Clicked", user);
+  const handleSignin = async () => {
+    const { email, password } = user;
+    const result = await Login(email, password);
+    console.log(result);
   };
 
   const handleSignup = () => {
@@ -153,7 +156,7 @@ export default function Example() {
                   </a>
                 </div>
               </div>
-              <div class="mt-12">
+              <div className="mt-12">
                 <Button handleClick={handleSignin}>Log in</Button>
               </div>
             </form>
@@ -308,7 +311,7 @@ export default function Example() {
                   </svg>
                 </div>
               </div>
-              <div class="mt-12">
+              <div className="mt-12">
                 <Button handleClick={handleSignup}>Sign up</Button>
               </div>
             </form>

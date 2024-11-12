@@ -6,7 +6,7 @@ import { useContext } from "react";
 export default function Menu() {
   const { handleAddTask } = useContext(TaskContext);
 
-  const token = localStorage.getItem("token") || false;
+  const token = localStorage.getItem("token") || true;
   const icons = {
     home: House2,
     calendar: CalendarTick,
