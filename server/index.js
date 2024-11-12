@@ -5,8 +5,7 @@ require("dotenv").config();
 const { User, Task, Cart } = require("./DB/index");
 const { authToken, SecretKey } = require("./Auth/index");
 const jwt = require("jsonwebtoken");
-
-const cors = require("cors");
+var cors = require("cors");
 
 const uri = process.env.DATABASEURL;
 
@@ -33,23 +32,23 @@ app.post("/user-login/", async (req, res) => {
       try {
         const user = await User.findOne({ email: email, password: password });
         if (!user) {
-          res.status(404).json({ message: "Invalid email or password" });
+          return res.status(404).json({ message: "Invalid email or password" });
         } else {
           const token = jwt.sign({ email: email, role: "user" }, SecretKey, {
             expiresIn: "2hr",
           });
-          res.status(200).json({
+          return res.status(200).json({
             message: "Logged in Sucessfully",
             user: user,
             token: token,
           });
         }
       } catch (err) {
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
       }
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -57,7 +56,7 @@ app.post("/user-signup/", async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   try {
     if (!email || !password || !firstName || !lastName) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Please provide all the required fields",
       });
     } else {
@@ -80,15 +79,15 @@ app.post("/user-signup/", async (req, res) => {
         });
 
         await cart.save();
-        res.status(201).json({ message: "User created successfully" });
+        return res.status(201).json({ message: "User created successfully" });
       } else {
-        res
+        return res
           .status(404)
           .json({ message: "User already exists with this Email Address" });
       }
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -103,21 +102,25 @@ app.post("/task-list/", authToken, async (req, res) => {
     }
     if (id) {
       try {
-        const taskList = await Cart.findOne({ CustomerId: id });
-        if (taskList !== null) {
+        const task = await Cart.findOne({ CustomerId: id });
+        const tasks = {
+          taskList: task.taskList,
+          CustomerId: task.CustomerId,
+        };
+        if (tasks !== null) {
           return res
             .status(200)
-            .json({ message: "Cart successfully", taskList: taskList });
+            .json({ message: "Cart successfully", data: tasks });
         }
         res.status(403).json({ message: "Customer ID not found in any cart" });
       } catch (err) {
-        res
+        return res
           .status(500)
           .json({ message: "internal Server Error", err: err.message });
       }
     }
   } catch (err) {
-    res
+    return res
       .status(500)
       .json({ message: "Internal Server Error", err: err.message });
   }
@@ -177,7 +180,6 @@ app.post("/add-task/", authToken, async (req, res) => {
     // Find the user and user cart
     const user = await User.findOne({ CustomerId: id });
     const userCart = await Cart.findOne({ CustomerId: id });
-
     if (!userCart) {
       return res.status(404).json({ message: "User not found in any cart" });
     }
@@ -194,8 +196,8 @@ app.post("/add-task/", authToken, async (req, res) => {
     const newTask = {
       TaskID: taskID,
       CustomerId: id,
-      title: TaskList.title,
-      description: TaskList.description,
+      Title: TaskList.title,
+      Description: TaskList.description,
       status: TaskList.status,
       date: dateOnly,
     };
@@ -209,17 +211,54 @@ app.post("/add-task/", authToken, async (req, res) => {
 
     await user.save(); // Save user (though not necessary unless you want to update something)
 
-    res.status(201).json({ message: "Task added successfully", newTask });
+    return res
+      .status(201)
+      .json({ message: "Task added successfully", newTask });
   } catch (err) {
     console.error(err); // Log the error for debugging
-    res
+    return res
       .status(500)
       .json({ message: "Internal Server Error", err: err.message });
   }
 });
 
-
-
+app.post("/task-update/", authToken, async (req, res) => {
+  const { id, TaskList } = req.body;
+  try {
+    const user = await User.findOne({ CustomerId: id });
+    if (!user) {
+      return res.status(200).json({ message: "User Id not found" });
+    }
+    const userCart = await Cart.findOne({ CustomerId: id });
+    if (!userCart) {
+      return res.status(200).json({ message: "User not found in any cart" });
+    }
+    const taskID = TaskList.taskID;
+    if (!taskID) {
+      return res.status(400).json({ message: "Task ID is required" });
+    }
+    const ExisitingTask = await Task.findOne({ TaskID: taskID });
+    if (!ExisitingTask) {
+      return res.status(404).json({ message: "Task ID invalid" });
+    } else {
+      const { title, description, status, date } = TaskList;
+      await Task.updateOne(
+        { TaskID: taskID }, // Filter: find the task by TaskID
+        {
+          $set: {
+            Title: title,
+            Description: description,
+            status: status,
+            date: date,
+          },
+        } // Update only specified fields
+      );
+      return res.status(200).json({ message: "Task updated successfully" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
 
 app.get("/", (req, res) => {
   console.log(req, "this is the request");
