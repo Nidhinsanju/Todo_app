@@ -1,12 +1,11 @@
 import Header from "./Header";
 import { House2, CalendarTick, CpuSetting, Logout } from "iconsax-react";
-import { TaskContext } from "../../App";
 import { useContext } from "react";
+import { TokenContext } from "../../Token";
 
 export default function Menu() {
-  const { handleAddTask } = useContext(TaskContext);
+  const { token, handleAddTask } = useContext(TokenContext);
 
-  const token = localStorage.getItem("token") || true;
   const icons = {
     home: House2,
     calendar: CalendarTick,

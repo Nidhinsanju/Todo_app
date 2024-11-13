@@ -11,8 +11,6 @@ export const CalendarBar = () => {
     }
   };
 
-  console.log(value);
-
   return (
     <>
       <Calendar
