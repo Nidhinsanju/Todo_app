@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "../Utils/Button";
 import { Login } from "../../hooks/hooks";
-export default function Example() {
+import { useNavigate } from "react-router-dom";
+import { TokenContext } from "../../Token";
+
+export default function LoginPage() {
+  const { updateToken, hanldeUserData } = useContext(TokenContext);
+
+  const [state, setState] = useState(true);
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
-  const [state, setState] = useState(true);
+  const path = window.location.pathname;
+  if (path.indexOf("/") !== -1) {
+    localStorage.clear();
+    updateToken(null);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +31,27 @@ export default function Example() {
 
   const handleSignin = async () => {
     const { email, password } = user;
-    const result = await Login(email, password);
-    console.log(result);
+    try {
+      const result = await Login(email, password);
+      const message = result.data?.message;
+      if (result.status === 200) {
+        const token = result.data?.token;
+        const userData = result.data?.user;
+        hanldeUserData({ userData });
+        localStorage.setItem("token", token);
+        updateToken(token);
+        localStorage.setItem("userData", JSON.stringify(userData));
+        alert(message);
+        navigate("/home");
+      }
+      if (result.status !== 200) {
+        alert(message);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
-  
   const handleSignup = () => {
     console.log("Clicked up", user);
   };
@@ -49,7 +76,7 @@ export default function Example() {
                 <p className="text-gray-800 text-sm mt-6">
                   Don't have an account{" "}
                   <a
-                    href="javascript:void(0);"
+                    href="#"
                     className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
                   >
                     <button onClick={() => setState(false)}>
@@ -87,13 +114,13 @@ export default function Example() {
                       </clipPath>
                     </defs>
                     <g
-                      clip-path="url(#a)"
+                      clipPath="url(#a)"
                       transform="matrix(1.33 0 0 -1.33 0 682.667)"
                     >
                       <path
                         fill="none"
-                        stroke-miterlimit="10"
-                        stroke-width="40"
+                        strokeMiterlimit="10"
+                        strokeWidth="40"
                         d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
                         data-original="#000000"
                       ></path>
@@ -142,7 +169,7 @@ export default function Example() {
                     className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
                   <label
-                    for="remember-me"
+                    htmlFor="remember-me"
                     className="ml-3 block text-sm text-gray-800"
                   >
                     Remember me
@@ -150,7 +177,7 @@ export default function Example() {
                 </div>
                 <div>
                   <a
-                    href="jajvascript:void(0);"
+                    href="#"
                     className="text-blue-600 font-semibold text-sm hover:underline"
                   >
                     Forgot Password?
@@ -174,7 +201,7 @@ export default function Example() {
                 <p className="text-gray-800 text-sm mt-6">
                   Have a Account?
                   <a
-                    href="javascript:void(0);"
+                    href="#"
                     className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
                   >
                     <button onClick={() => setState(true)}>Login</button>
@@ -242,13 +269,13 @@ export default function Example() {
                       </clipPath>
                     </defs>
                     <g
-                      clip-path="url(#a)"
+                      clipPath="url(#a)"
                       transform="matrix(1.33 0 0 -1.33 0 682.667)"
                     >
                       <path
                         fill="none"
-                        stroke-miterlimit="10"
-                        stroke-width="40"
+                        strokeMiterlimit="10"
+                        strokeWidth="40"
                         d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
                         data-original="#000000"
                       ></path>
