@@ -24,6 +24,7 @@ export default function Example() {
     console.log(result);
   };
 
+  
   const handleSignup = () => {
     console.log("Clicked up", user);
   };
