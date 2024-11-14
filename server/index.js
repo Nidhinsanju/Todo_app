@@ -272,6 +272,31 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "getting response", object });
 });
 
+app.delete("/delete-user", authToken, async (req, res) => {
+  const { id } = req.body;
+  try {
+    if (!id) {
+      return res.status(400).json({ message: "ID is required" });
+    }
+    const user = await User.findOne({ CustomerId: id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const userCart = await Cart.findOne({ CustomerId: id });
+    if (!userCart) {
+      return res.status(404).json({ message: "User not found in any cart" });
+    }
+    await Task.deleteMany({ CustomerId: id });
+    await Cart.deleteOne({ CustomerId: id });
+    await user.deleteOne();
+    return res
+      .status(200)
+      .json({ message: "User and associated tasks deleted" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
