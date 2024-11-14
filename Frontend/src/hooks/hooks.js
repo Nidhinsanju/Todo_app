@@ -25,6 +25,7 @@ function HandleError(err) {
   }
 }
 
+//API for Login USER
 export const Login = async (name, password) => {
   try {
     const response = await axios.post(
@@ -32,6 +33,32 @@ export const Login = async (name, password) => {
       {
         email: name,
         password: password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response; // Successfully logged in, return the response.
+  } catch (err) {
+    const result = HandleError(err);
+    return result; // Error occurred, return the error message.
+    // Handle error gracefully
+  }
+};
+
+//API for Register USER
+export const SignUp = async (values) => {
+  const { firstName, lastName, email, confirmPassword } = values;
+  try {
+    const response = await axios.post(
+      baseURL + "/user-signup/",
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: confirmPassword,
       },
       {
         headers: {

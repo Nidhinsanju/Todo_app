@@ -4,10 +4,11 @@ import ProtectedRoute from "./ProtecteRoute";
 import Home from "../Components/pages/Home";
 import Login from "../Components/pages/Login";
 import AccountSettings from "../Components/pages/AccountSettings";
-import Menu from "../Components/Utils/Menu";
+import SignUp from "../Components/pages/SignUp";
 
 const router = createBrowserRouter([
   { path: "/", element: <Login />, index: true },
+  { path: "/signup", element: <SignUp />, index: true },
   {
     element: <ProtectedRoute />,
     children: [
