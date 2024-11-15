@@ -78,10 +78,10 @@ export const SignUp = async (values) => {
 export const SubmitTask = async (id, values) => {
   try {
     const response = axios.post(
-      baseURL + "/task-update/",
+      baseURL + "/add-task/",
       {
         id: id,
-        TaskList: values,
+        TaskList: [values],
       },
       {
         headers: {
