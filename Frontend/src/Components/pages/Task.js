@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { SubmitTask } from "../../hooks/hooks";
 
 export default function Task({ data }) {
-  const [newData, setNewData] = useState(data);
+  const [newData, setNewData] = useState(Array.isArray(data) ? data : []);
   const [edit, setEdit] = useState(true);
   const [taskId, setTaskId] = useState("");
   const [checkBoxState, setCheckboxState] = useState({});
 
   useEffect(() => {
-    setNewData(data);
+    // If data is valid and an array, update the newData state
+    if (Array.isArray(data)) {
+      setNewData(data);
+    } else {
+      setNewData([]); // In case data is not an array, set it to an empty array
+    }
   }, [data]);
 
   const handleInputChange = (id, field, value) => {
@@ -29,7 +34,6 @@ export default function Task({ data }) {
     try {
       const Userid = localStorage.getItem("userid");
       const response = await SubmitTask(Userid, SubmitedData);
-      console.log(response);
       if (response.data.status === 200) {
         const message = response.data.message;
         alert(message);
@@ -71,88 +75,100 @@ export default function Task({ data }) {
     });
   };
 
-  return (
-    <>
-      <section className="flex flex-col w-4/5">
-        {newData.map((task, i) => {
-          return (
-            <main key={i} className="border-2 border-sky-500 m-2 p-2 ">
-              <header className="flex flex-row w-full justify-between">
-                <h4>
-                  <input
-                    disabled={task.id !== taskId || edit} // Make sure the logic is correct for enabling editing
-                    className=""
-                    id="title"
-                    onChange={(e) =>
-                      handleInputChange(task.id, "title", e.target.value)
-                    }
-                    placeholder="Enter your title"
-                    value={task?.title}
-                  />
-                </h4>
+  if (newData?.length > 0) {
+    return (
+      <>
+        <section className="flex flex-col w-4/5">
+          {newData.map((task, i) => {
+            return (
+              <main key={i} className="border-2 border-sky-500 m-2 p-2 ">
+                <header className="flex flex-row w-full justify-between">
+                  <h4>
+                    <input
+                      disabled={task.id !== taskId || edit} // Make sure the logic is correct for enabling editing
+                      className=""
+                      id="title"
+                      onChange={(e) =>
+                        handleInputChange(task.id, "title", e.target.value)
+                      }
+                      placeholder="Enter your title"
+                      value={task?.title}
+                    />
+                  </h4>
+                  <section>
+                    <button
+                      onClick={() => hanldeClick(task?.id)}
+                      className="  w-24 border mr-5 border-white p-1 rounded-bl-lg rounded-tr-lg shadow-xl bg-blue-500 active:scale-95 transition duration-150 ease-in-out"
+                    >
+                      Apply
+                    </button>
+                    <button
+                      onClick={() => hanldeClick(task?.id)}
+                      className="items-end mr-5 w-24 border border-white p-1 rounded-bl-lg rounded-tr-lg shadow-xl bg-blue-500 active:scale-95 transition duration-150 ease-in-out"
+                    >
+                      Edit
+                    </button>
+                  </section>
+                </header>
                 <section>
-                  <button
-                    onClick={() => hanldeClick(task?.id)}
-                    className="  w-24 border mr-5 border-white p-1 rounded-bl-lg rounded-tr-lg shadow-xl bg-blue-500 active:scale-95 transition duration-150 ease-in-out"
-                  >
-                    Apply
-                  </button>
-                  <button
-                    onClick={() => hanldeClick(task?.id)}
-                    className="items-end mr-5 w-24 border border-white p-1 rounded-bl-lg rounded-tr-lg shadow-xl bg-blue-500 active:scale-95 transition duration-150 ease-in-out"
-                  >
-                    Edit
-                  </button>
+                  <div className="m-2">
+                    <textarea
+                      disabled={task.id !== taskId || edit} // Make sure the logic is correct for enabling editing
+                      id="message"
+                      onChange={(e) =>
+                        handleInputChange(
+                          task.id,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      rows="4"
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                    >
+                      {task.description}
+                    </textarea>
+                  </div>
                 </section>
-              </header>
-              <section>
-                <div className="m-2">
-                  <textarea
-                    disabled={task.id !== taskId || edit} // Make sure the logic is correct for enabling editing
-                    id="message"
-                    onChange={(e) =>
-                      handleInputChange(task.id, "description", e.target.value)
-                    }
-                    rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Write your thoughts here..."
-                  >
-                    {task.description}
-                  </textarea>
+                <div className="flex justify-end m-2">
+                  <main className="flex items-center  p-2">
+                    <input
+                      className="w-4 h-4"
+                      type="checkbox"
+                      name="task_status"
+                      checked={!!checkBoxState[task.id]} // Defaults to false if undefined
+                      id={task.id}
+                      onClick={() => {
+                        handleCheckboxChange(task.id);
+                      }}
+                    />
+                    <label
+                      htmlFor="default-checkbox"
+                      className="ms-2 text-sm font-medium text-gray-900 dark:text-dark items-center"
+                    >
+                      Completed
+                    </label>
+                  </main>
                 </div>
-              </section>
-              <div className="flex justify-end m-2">
-                <main className="flex items-center  p-2">
-                  <input
-                    className="w-4 h-4"
-                    type="checkbox"
-                    name="task_status"
-                    checked={!!checkBoxState[task.id]} // Defaults to false if undefined
-                    id={task.id}
-                    onClick={() => {
-                      handleCheckboxChange(task.id);
-                    }}
-                  />
-                  <label
-                    htmlFor="default-checkbox"
-                    className="ms-2 text-sm font-medium text-gray-900 dark:text-dark items-center"
-                  >
-                    Completed
-                  </label>
-                </main>
-              </div>
-            </main>
-          );
-        })}
-        <section className="flex justify-end mr-10 w-full mt-4 ">
-          <button
-            className="bg-blue-500 text-white font-medium rounded-lg px-4 py-2 transition duration-150 ease-in-out hover:bg-blue-600"
-            onClick={() => handleSubmit(newData)}
-          >
-            Save
-          </button>
+              </main>
+            );
+          })}
+          <section className="flex justify-end mr-10 w-full mt-4 ">
+            <button
+              className="bg-blue-500 text-white font-medium rounded-lg px-4 py-2 transition duration-150 ease-in-out hover:bg-blue-600"
+              onClick={() => handleSubmit(newData)}
+            >
+              Save
+            </button>
+          </section>
         </section>
-      </section>
-    </>
-  );
+      </>
+    );
+  } else {
+    return (
+      <>
+        <section className="flex flex-col w-4/5">No Data</section>
+      </>
+    );
+  }
 }

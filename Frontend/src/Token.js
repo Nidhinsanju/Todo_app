@@ -4,9 +4,7 @@ export const TokenContext = createContext();
 
 export function TokenProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const count = parseInt(localStorage.getItem("taskCount"), 10) || 0; // Ensure it's a number
-  const [taskCount, setTaskCount] = useState(count);
-  const [user, setUser] = useState({});
+  const [taskCount, setTaskCount] = useState(0);
 
   const updateToken = (newToken) => {
     if (newToken) {
@@ -18,14 +16,10 @@ export function TokenProvider({ children }) {
     }
   };
 
-  const hanldeUserData = ({ userData }) => {
-    setUser(userData);
-  };
-
   const handleAddTask = () => {
     setTaskCount((prevCount) => {
       const newCount = prevCount + 1;
-      localStorage.setItem("taskCount", newCount); // Save to localStorage
+      setTaskCount(newCount);
       return newCount;
     });
   };
@@ -37,8 +31,6 @@ export function TokenProvider({ children }) {
         updateToken,
         taskCount,
         handleAddTask,
-        user,
-        hanldeUserData,
       }}
     >
       {children}

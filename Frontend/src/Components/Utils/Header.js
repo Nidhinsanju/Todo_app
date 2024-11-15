@@ -1,4 +1,6 @@
 export default function Header() {
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
   return (
     <>
       <header>
@@ -9,8 +11,8 @@ export default function Header() {
             style={{ width: "47px", height: "50px" }} // Set explicit width and height
           />
           <div className="mx-3 font-mono py-4">
-            <h1 className="text-black ">Alwell O.</h1>
-            <h2 className="text-gray-500 ">Model</h2>
+            <h1 className="text-black ">{firstName}</h1>
+            <h2 className="text-gray-500 ">{lastName}</h2>
           </div>
         </div>
       </header>

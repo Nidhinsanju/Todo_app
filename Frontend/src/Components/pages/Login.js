@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup"; // for schema validation
 
 export default function LoginPage() {
-  const { updateToken, hanldeUserData } = useContext(TokenContext);
+  const { updateToken } = useContext(TokenContext);
   const navigate = useNavigate();
 
   const hanldelogin = async (values) => {
@@ -15,11 +15,13 @@ export default function LoginPage() {
       if (result.status === 200) {
         const message = result.data?.message;
         const token = result.data?.token;
-        const userData = result.data?.user;
-        hanldeUserData({ userData });
+        const userData = result.data?.userDetails;
+        const { CustomerId, firstName, lastName } = userData;
+        localStorage.setItem("firstName", firstName);
+        localStorage.setItem("lastName", lastName);
         localStorage.setItem("token", token);
         updateToken(token);
-        localStorage.setItem("userData", JSON.stringify(userData));
+        localStorage.setItem("id", CustomerId);
         alert(message);
         navigate("/home");
       } else {

@@ -97,3 +97,26 @@ export const SubmitTask = async (id, values) => {
     // Handle error gracefully
   }
 };
+
+export const getTaskList = async (id) => {
+  const userID = parseInt(id);
+  try {
+    const response = await axios.post(
+      baseURL + "/task-list/",
+      {
+        id: userID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    const result = HandleError(err);
+    return result; // Error occurred, return the error message.
+    // Handle error gracefully
+  }
+};
