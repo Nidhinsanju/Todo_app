@@ -28,7 +28,8 @@ export default function Task({ data }) {
   const handleSubmit = async (SubmitedData) => {
     try {
       const Userid = localStorage.getItem("userid");
-      const response = SubmitTask(Userid, SubmitedData);
+      const response = await SubmitTask(Userid, SubmitedData);
+      console.log(response);
       if (response.data.status === 200) {
         const message = response.data.message;
         alert(message);
