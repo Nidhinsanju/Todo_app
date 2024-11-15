@@ -25,6 +25,7 @@ function HandleError(err) {
   }
 }
 
+const token = localStorage.getItem("token");
 //API for Login USER
 export const Login = async (name, password) => {
   try {
@@ -67,6 +68,29 @@ export const SignUp = async (values) => {
       }
     );
     return response; // Successfully logged in, return the response.
+  } catch (err) {
+    const result = HandleError(err);
+    return result; // Error occurred, return the error message.
+    // Handle error gracefully
+  }
+};
+
+export const SubmitTask = async (id, values) => {
+  try {
+    const response = axios.post(
+      baseURL + "/task-update/",
+      {
+        id: id,
+        TaskList: values,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
   } catch (err) {
     const result = HandleError(err);
     return result; // Error occurred, return the error message.

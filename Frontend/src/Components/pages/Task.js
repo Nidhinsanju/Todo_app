@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SubmitTask } from "../../hooks/hooks";
 
 export default function Task({ data }) {
   const [newData, setNewData] = useState(data);
@@ -24,8 +25,21 @@ export default function Task({ data }) {
     setNewData(updatedData);
   };
 
-  const handleSubmit = (SubmitedData) => {
-    console.log(SubmitedData);
+  const handleSubmit = async (SubmitedData) => {
+    try {
+      const Userid = localStorage.getItem("userid");
+      const response = SubmitTask(Userid, SubmitedData);
+      if (response.data.status === 200) {
+        const message = response.data.message;
+        alert(message);
+      }
+      if (response.data.status !== 200) {
+        const errorMessage = response.message;
+        alert(errorMessage);
+      }
+    } catch (err) {
+      alert(err?.message);
+    }
   };
 
   const hanldeClick = (id) => {
